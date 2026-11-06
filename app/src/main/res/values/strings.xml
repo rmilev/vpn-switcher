@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">VPN Switcher</string>
+    <string name="service_description">When you open an app, connects OpenVPN to the PIA region you picked for it (or turns the VPN off, or leaves it as it is). It only sees which app is open, never what is on the screen.</string>
+</resources>
