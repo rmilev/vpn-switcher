@@ -51,7 +51,12 @@ sealed interface Target {
 object Assignments {
     private const val FILE = "assignments"
     private const val OFF = "off"
-    private val defaults = mapOf("mk.tv" to "north_macedonia")
+    private val defaults = mapOf(
+        "mk.tv" to "north_macedonia",
+        "hr.hrt.hrti" to "croatia",
+        "com.morescreens.atv.rts" to "serbia",
+        "com.stremio.one" to "us_west",
+    )
 
     fun get(context: Context, pkg: String): Target {
         val prefs = context.getSharedPreferences(FILE, Context.MODE_PRIVATE)
