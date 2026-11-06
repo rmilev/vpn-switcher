@@ -5,4 +5,8 @@
         <item name="android:colorBackground">#FF0B0D12</item>
         <item name="android:windowFullscreen">true</item>
     </style>
+    <!-- The hold screen appears and disappears without transitions, so it reads as the app loading -->
+    <style name="Theme.VpnSwitch.Hold">
+        <item name="android:windowAnimationStyle">@null</item>
+    </style>
 </resources>

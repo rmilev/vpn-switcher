@@ -23,6 +23,16 @@
             </intent-filter>
         </activity>
 
+        <!-- Covers an app while the VPN switches, then reopens it -->
+        <activity
+            android:name=".HoldActivity"
+            android:exported="false"
+            android:excludeFromRecents="true"
+            android:launchMode="singleTask"
+            android:screenOrientation="landscape"
+            android:taskAffinity=""
+            android:theme="@style/Theme.VpnSwitch.Hold" />
+
         <!-- Watches which app comes to the front and switches the VPN country for it -->
         <service
             android:name=".SwitchService"
