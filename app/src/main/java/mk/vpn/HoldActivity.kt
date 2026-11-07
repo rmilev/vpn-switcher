@@ -57,7 +57,8 @@ import kotlinx.coroutines.withTimeoutOrNull
 
 /**
  * Covers an app that just opened while the VPN switches to its region, then reopens the app from its
- * start screen so it loads (and checks where you are) over the new connection.
+ * start screen so it loads (and checks where you are) over the new connection. Apps that recover from a
+ * network change by themselves ([RESUMES_ITSELF]) are brought back as they were instead, keeping their place.
  */
 class HoldActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -78,13 +79,17 @@ class HoldActivity : ComponentActivity() {
         runCatching { startActivity(Intent(this, HoldActivity::class.java).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_REORDER_TO_FRONT or Intent.FLAG_ACTIVITY_NO_ANIMATION)) }
     }
 
-    /** Fresh start of the app's launcher screen: CLEAR_TASK finishes what it had loaded before the switch. */
+    /**
+     * Fresh start of the app's launcher screen: CLEAR_TASK finishes what it had loaded before the switch.
+     * An app in [RESUMES_ITSELF] is just brought to the front (as the launcher would), right where it was.
+     */
     private fun reopen(pkg: String) {
         val launch = packageManager.getLeanbackLaunchIntentForPackage(pkg) ?: packageManager.getLaunchIntentForPackage(pkg)
         if (launch != null) {
             justOpened(pkg)
+            val fresh = if (pkg in RESUMES_ITSELF) Intent.FLAG_ACTIVITY_RESET_TASK_IF_NEEDED else Intent.FLAG_ACTIVITY_CLEAR_TASK
             runCatching {
-                startActivity(launch.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NO_ANIMATION))
+                startActivity(launch.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or fresh or Intent.FLAG_ACTIVITY_NO_ANIMATION))
             }
         }
         finish()
@@ -110,6 +115,9 @@ class HoldActivity : ComponentActivity() {
                     .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NO_ANIMATION),
             )
         }
+
+        /** Apps that reload by themselves when the network changes, so restarting them would only lose your place. */
+        private val RESUMES_ITSELF = setOf("mk.tv")
 
         private fun justOpened(pkg: String) {
             opened = pkg to SystemClock.elapsedRealtime()
