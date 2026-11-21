@@ -33,6 +33,13 @@
             android:taskAffinity=""
             android:theme="@style/Theme.VpnSwitch.Hold" />
 
+        <!-- Apps that switch only when they need their region (МК ТВ for МРТ 1–5) say so here -->
+        <receiver android:name=".DemandReceiver" android:exported="true">
+            <intent-filter>
+                <action android:name="mk.vpn.action.NEED_VPN" />
+            </intent-filter>
+        </receiver>
+
         <!-- Watches which app comes to the front and switches the VPN country for it -->
         <service
             android:name=".SwitchService"

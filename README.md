@@ -2,6 +2,8 @@
 
 A small TV app that switches your VPN country per app: open МК ТВ and it connects to North Macedonia, open Stremio and it connects to the US, and so on. It drives [OpenVPN for Android](https://f-droid.org/packages/de.blinkt.openvpn/) through that app's remote-control API, using Private Internet Access's official OpenVPN profiles (every PIA region is built in). An accessibility service sees which app comes to the front (it never reads the screen) and connects that app's region, turns the VPN off, or leaves it as it is.
 
+**МК ТВ only gets its region when it needs it.** Only the live МРТ 1–5 channels need a Macedonian IP. Everything else in МК ТВ works from anywhere, and YouTube asks VPN users to "sign in to confirm you're not a bot". So while МК ТВ is in front the VPN is off, until МК ТВ asks for North Macedonia (it sends `mk.vpn.action.NEED_VPN` when an МРТ 1–5 channel starts, and again with `need=false` when you leave the player). This switch happens in the background, without the hold screen, because МК ТВ retries by itself when the connection changes.
+
 ## Setup on the TV
 
 1. Install [OpenVPN for Android](https://f-droid.org/packages/de.blinkt.openvpn/) and VPN Switcher (`./gradlew assembleRelease`, then `adb install`).

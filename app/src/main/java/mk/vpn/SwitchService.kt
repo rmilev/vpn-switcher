@@ -25,6 +25,13 @@ class SwitchService : AccessibilityService() {
         // Our own screens (setup, hold) don't count as leaving the app being switched for
         if (pkg == packageName || pkg == lastPackage) return
         lastPackage = pkg
+        Demand.seen(this, pkg)
+        // An app that asks for its region itself (МК ТВ, for МРТ 1–5): no hold screen, it says what it needs
+        if (Demand.handles(this, pkg)) {
+            job?.cancel()
+            Demand.onForeground(this, pkg)
+            return
+        }
         val target = Assignments.get(this, pkg)
         if (target == Target.Leave || HoldActivity.recentlyOpened(pkg)) return
         job?.cancel()

@@ -247,7 +247,7 @@ private fun AppsColumn(modifier: Modifier, assignmentsTick: Int, rowFocus: Mutab
                                 maxLines = 1, overflow = TextOverflow.Ellipsis, modifier = Modifier.weight(1f),
                             )
                             Text(
-                                targetLabel(target),
+                                targetLabel(target) + if (target is Target.To && Demand.isOnDemand(app.pkg)) " · when needed" else "",
                                 color = if (focused) Color.Black else if (target is Target.To) Gold else Dim, fontSize = 18.sp,
                                 maxLines = 1, overflow = TextOverflow.Ellipsis,
                             )
